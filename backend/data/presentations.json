@@ -1,0 +1,37 @@
+{
+  "presentations": {
+    "ias-upravlencheskiy-uchet": {
+      "id": "ias-upravlencheskiy-uchet",
+      "title": "ИАС «Управленческий учет»",
+      "description": "Автоматизация управленческого учета для предприятий",
+      "file": "/assets/presentations/ias-upravlencheskiy-uchet.pdf",
+      "fileName": "ias-upravlencheskiy-uchet.pdf",
+      "downloadName": "ИАС-Управленческий-учет-ДИАВЕР.pdf",
+      "category": "accounting",
+      "duration": "45 минут",
+      "featured": true,
+      "demoRequests": 12,
+      "createdAt": "2024-01-15T10:00:00.000Z",
+      "updatedAt": "2024-01-15T10:00:00.000Z"
+    },
+    "ais-kadastr": {
+      "id": "ais-kadastr",
+      "title": "АИС «Кадастр»",
+      "description": "Информационная система кадастрового учета",
+      "file": "/assets/presentations/ais-kadastr.pdf",
+      "fileName": "ais-kadastr.pdf",
+      "downloadName": "АИС-Кадастр-ДИАВЕР.pdf",
+      "category": "government",
+      "duration": "30 минут",
+      "featured": false,
+      "demoRequests": 8,
+      "createdAt": "2024-01-10T10:00:00.000Z",
+      "updatedAt": "2024-01-10T10:00:00.000Z"
+    }
+  },
+  "categories": ["accounting", "government", "business", "finance", "education"],
+  "settings": {
+    "uploadPath": "/assets/presentations/",
+    "allowedFormats": [".pdf", ".pptx", ".ppt"]
+  }
+}

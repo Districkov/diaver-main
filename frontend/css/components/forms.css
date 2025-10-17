@@ -1,0 +1,185 @@
+/* ==========================================================================
+   Contact Form Styling (Dark Theme)
+   Стили, переработанные в соответствии с предоставленным изображением.
+   ========================================================================== */
+
+/* --- Контейнер формы --- */
+.form-container-enhanced {
+    background: #1c1c1f; /* Глубокий тёмно-серый фон */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px; /* Более скругленные углы */
+    padding: 2.5rem 3rem;
+    backdrop-filter: blur(12px);
+}
+
+/* --- Заголовок формы --- */
+.form-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.form-title {
+    color: #ffffff;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+}
+
+.form-subtitle {
+    color: #a1a1aa; /* Светло-серый для подзаголовка */
+    font-size: 1rem;
+}
+
+/* --- Тело формы и расположение элементов --- */
+.contact-form-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem; /* Пространство между группами полей */
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem; /* Пространство между меткой и полем */
+}
+
+/* --- Стили для меток (label) --- */
+.form-group label {
+    color: #a1a1aa;
+    font-weight: 500;
+    font-size: 0.875rem; /* 14px */
+}
+
+/* --- Общие стили для полей ввода, textarea и select --- */
+.form-group input,
+.form-group textarea,
+.select-wrapper select {
+    width: 100%;
+    padding: 12px 16px;
+    background: #1c1c1f; /* ИЗМЕНЕНО: Фон сделан одинаковым с формой */
+    border: 1px solid #3f3f46; /* Едва заметная граница */
+    border-radius: 8px;
+    color: #f4f4f5; /* Светлый цвет текста */
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* --- Стили для плейсхолдера --- */
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #71717a;
+}
+
+/* --- Состояние фокуса --- */
+.form-group input:focus,
+.form-group textarea:focus,
+.select-wrapper select:focus {
+    outline: none;
+    border-color: var(--orange-primary); /* Оранжевый акцент при фокусе */
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+}
+
+/* --- Кастомный Select (Выпадающий список) --- */
+.select-wrapper {
+    position: relative;
+}
+
+.select-wrapper::after {
+    content: '▼';
+    font-size: 0.8rem;
+    color: #a1a1aa;
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none; /* Чтобы клик проходил на сам select */
+}
+
+.select-wrapper select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding-right: 40px; /* Место для стрелки */
+}
+
+/* --- Кастомный чекбокс --- */
+.form-group-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    color: #a1a1aa;
+}
+
+.form-group-checkbox input[type="checkbox"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #3f3f46;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.form-group-checkbox input[type="checkbox"]:hover {
+    border-color: var(--orange-primary);
+}
+
+.form-group-checkbox input[type="checkbox"]:checked {
+    background-color: var(--orange-primary);
+    border-color: var(--orange-primary);
+}
+
+.form-group-checkbox input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 6px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.form-group-checkbox a {
+    color: var(--orange-primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.form-group-checkbox a:hover {
+    text-decoration: underline;
+}
+
+
+/* --- Адаптивность --- */
+@media (max-width: 968px) {
+    .contact-layout-enhanced {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .form-row {
+        grid-template-columns: 1fr; /* Поля в один столбец на мобильных */
+    }
+    .form-container-enhanced {
+        padding: 2rem 1.5rem;
+    }
+    .form-title {
+        font-size: 2rem;
+    }
+}
+/* Изменение цвета текста в выпадающем списке на черный */
+select option {
+    color: #000000 !important;
+}

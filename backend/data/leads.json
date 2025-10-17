@@ -1,0 +1,25 @@
+[
+  {
+    "id": 1,
+    "name": "Иван Петров",
+    "company": "ООО 'ТехноПро'",
+    "email": "ivan@techpro.ru",
+    "phone": "+7 (999) 123-45-67",
+    "service": "development",
+    "message": "Интересует разработка CRM-системы для нашего бизнеса",
+    "status": "new",
+    "date": "2024-01-15T10:30:00Z"
+  },
+  {
+    "id": 2,
+    "name": "Мария Сидорова",
+    "company": "АО 'БизнесКонсалт'",
+    "email": "sidorova@bconsult.ru",
+    "phone": "+7 (916) 765-43-21",
+    "service": "consulting",
+    "message": "Нужна консультация по внедрению систем аналитики",
+    "status": "processed",
+    "date": "2024-01-14T14:20:00Z",
+    "updatedAt": "2024-01-15T09:00:00Z"
+  }
+]
