@@ -1,12 +1,16 @@
 {
-  "name": "diaver-admin",
+  "name": "diaver-website",
   "version": "1.0.0",
-  "description": "Админ-панель для ДИАВЕР",
-  "main": "backend/scripts/server.js",
+  "description": "Официальный сайт ДИАВЕР с админ-панелью",
+  "main": "backend/server.js",
   "scripts": {
     "start": "node backend/server.js",
-    "dev": "nodemon backend/server.js"
+    "dev": "nodemon backend/server.js",
+    "build": "echo 'No build step required for HTML project'"
   },
+  "keywords": ["diaver", "website", "admin", "presentations"],
+  "author": "DIAVER Team",
+  "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.2",
@@ -14,5 +18,8 @@
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }
