@@ -7,21 +7,18 @@ const multer = require('multer');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 🔧 ИСПРАВЛЕННЫЕ ПУТИ ДЛЯ RENDER.COM
-const rootDir = __dirname;
-const FRONTEND_DIR = path.join(rootDir, 'frontend');
+// 🔧 ПРАВИЛЬНЫЕ ПУТИ ДЛЯ RENDER (сервер в корне)
+const FRONTEND_DIR = path.join(__dirname, 'frontend');
+const DATA_DIR = path.join(__dirname, 'data');
+const PROJECTS_FILE = path.join(DATA_DIR, 'projects.json');
+const LEADS_FILE = path.join(DATA_DIR, 'leads.json');
+const PRESENTATIONS_FILE = path.join(DATA_DIR, 'presentations.json');
+const PRESENTATIONS_DIR = path.join(FRONTEND_DIR, 'assets/presentations');
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.static(FRONTEND_DIR));
-
-// 🔧 ИСПРАВЛЕННЫЕ ПУТИ ДЛЯ ДАННЫХ
-const DATA_DIR = path.join(rootDir, 'data');
-const PROJECTS_FILE = path.join(DATA_DIR, 'projects.json');
-const LEADS_FILE = path.join(DATA_DIR, 'leads.json');
-const PRESENTATIONS_FILE = path.join(DATA_DIR, 'presentations.json');
-const PRESENTATIONS_DIR = path.join(FRONTEND_DIR, 'assets/presentations');
 
 // Создаем необходимые директории при запуске
 function initializeDirectories() {
@@ -73,7 +70,6 @@ const storage = multer.diskStorage({
     cb(null, PRESENTATIONS_DIR);
   },
   filename: (req, file, cb) => {
-    // Генерируем уникальное имя файла
     const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname);
     cb(null, uniqueName);
   }
@@ -81,7 +77,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB limit
+  limits: { fileSize: 50 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const allowedFormats = ['.pdf', '.pptx', '.ppt'];
     const fileExt = path.extname(file.originalname).toLowerCase();
@@ -153,7 +149,6 @@ const writePresentations = (data) => {
 
 // ==================== API ДЛЯ ПРЕЗЕНТАЦИЙ ====================
 
-// Получить все презентации
 app.get('/api/presentations', (req, res) => {
   try {
     const data = readPresentations();
@@ -165,7 +160,6 @@ app.get('/api/presentations', (req, res) => {
   }
 });
 
-// Получить презентацию по ID
 app.get('/api/presentations/:id', (req, res) => {
   try {
     const data = readPresentations();
@@ -182,7 +176,6 @@ app.get('/api/presentations/:id', (req, res) => {
   }
 });
 
-// Создать новую презентацию
 app.post('/api/presentations', upload.single('file'), (req, res) => {
   try {
     if (!req.file) {
@@ -215,7 +208,6 @@ app.post('/api/presentations', upload.single('file'), (req, res) => {
 
     data.presentations[presentationId] = presentation;
     
-    // Добавляем новую категорию если её нет
     if (!data.categories.includes(category)) {
       data.categories.push(category);
     }
@@ -233,7 +225,6 @@ app.post('/api/presentations', upload.single('file'), (req, res) => {
   }
 });
 
-// Обновить презентацию
 app.put('/api/presentations/:id', upload.single('file'), (req, res) => {
   try {
     const data = readPresentations();
@@ -245,7 +236,6 @@ app.put('/api/presentations/:id', upload.single('file'), (req, res) => {
 
     const { title, description, category, duration, featured } = req.body;
     
-    // Обновляем данные
     presentation.title = title || presentation.title;
     presentation.description = description || presentation.description;
     presentation.category = category || presentation.category;
@@ -253,9 +243,7 @@ app.put('/api/presentations/:id', upload.single('file'), (req, res) => {
     presentation.featured = featured === 'true';
     presentation.updatedAt = new Date().toISOString();
 
-    // Если загружен новый файл
     if (req.file) {
-      // Удаляем старый файл
       const oldFilePath = path.join(PRESENTATIONS_DIR, presentation.fileName);
       if (fs.existsSync(oldFilePath)) {
         fs.unlinkSync(oldFilePath);
@@ -279,7 +267,6 @@ app.put('/api/presentations/:id', upload.single('file'), (req, res) => {
   }
 });
 
-// Удалить презентацию
 app.delete('/api/presentations/:id', (req, res) => {
   try {
     const data = readPresentations();
@@ -289,13 +276,11 @@ app.delete('/api/presentations/:id', (req, res) => {
       return res.status(404).json({ error: 'Презентация не найдена' });
     }
 
-    // Удаляем файл
     const filePath = path.join(PRESENTATIONS_DIR, presentation.fileName);
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
     }
 
-    // Удаляем из данных
     delete data.presentations[req.params.id];
     writePresentations(data);
 
@@ -309,7 +294,6 @@ app.delete('/api/presentations/:id', (req, res) => {
   }
 });
 
-// Получить категории презентаций
 app.get('/api/presentations/categories', (req, res) => {
   try {
     const data = readPresentations();
@@ -330,7 +314,6 @@ function generateId(title) {
 
 // ==================== СУЩЕСТВУЮЩИЕ API ====================
 
-// API для проектов
 app.get('/api/projects', (req, res) => {
   try {
     let projects = readProjects();
@@ -433,7 +416,6 @@ app.post('/api/admin/login', (req, res) => {
   try {
     const { username, password } = req.body;
     
-    // В продакшене используйте переменные окружения!
     const adminUser = process.env.ADMIN_USERNAME || 'admin';
     const adminPass = process.env.ADMIN_PASSWORD || 'admin';
     
@@ -541,9 +523,8 @@ app.use('/api/*', (req, res) => {
   res.status(404).json({ error: 'API endpoint not found: ' + req.originalUrl });
 });
 
-// 🔧 ИСПРАВЛЕННАЯ ОБРАБОТКА 404 ДЛЯ СТРАНИЦ
+// Обработка 404 для страниц
 app.use('*', (req, res) => {
-  // Пытаемся отдать index.html для SPA маршрутов
   res.sendFile(path.join(FRONTEND_DIR, 'index.html'), (err) => {
     if (err) {
       res.status(404).send('Страница не найдена');
@@ -552,13 +533,20 @@ app.use('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Сервер запущен на порту ${PORT}`);
-  console.log(`📁 Корневая директория: ${rootDir}`);
-  console.log(`📁 Статические файлы: ${FRONTEND_DIR}`);
-  console.log(`💾 Данные: ${DATA_DIR}`);
-  console.log(`📊 Презентации: ${PRESENTATIONS_DIR}`);
-  console.log(`🌐 Главная: http://localhost:${PORT}`);
-  console.log(`🔧 Админка: http://localhost:${PORT}/admin`);
-  console.log(`💡 Решения: http://localhost:${PORT}/solutions`);
-  console.log(`⚡ Режим: ${process.env.NODE_ENV || 'development'}`);
+  console.log('🚀 ============ СЕРВЕР ЗАПУЩЕН ============');
+  console.log(`📍 Порт: ${PORT}`);
+  console.log(`📁 Корневая директория: ${__dirname}`);
+  console.log(`🌐 Frontend папка: ${FRONTEND_DIR}`);
+  console.log(`💾 Data папка: ${DATA_DIR}`);
+  console.log(`📊 Presentations папка: ${PRESENTATIONS_DIR}`);
+  console.log('🔗 Доступные URL:');
+  console.log(`   🌐 Главная: http://localhost:${PORT}`);
+  console.log(`   🔧 Админка: http://localhost:${PORT}/admin`);
+  console.log(`   💡 Решения: http://localhost:${PORT}/solutions`);
+  console.log(`   📞 Контакты: http://localhost:${PORT}/contacts`);
+  console.log('🎯 API endpoints:');
+  console.log('   GET  /api/projects');
+  console.log('   POST /api/presentations');
+  console.log('   POST /api/contact');
+  console.log('==========================================');
 });
