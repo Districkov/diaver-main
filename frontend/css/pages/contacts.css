@@ -400,8 +400,6 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
     min-height: 400px;
-    position: relative;
-    min-height: 400px;
 }
 
 #yandex-map {
@@ -411,6 +409,7 @@
     position: relative;
 }
 
+/* Индикатор загрузки карты */
 
 
 .map-placeholder-enhanced.loaded::before,
@@ -436,7 +435,7 @@
 
 .ymaps-2-1-79-balloon__content {
     border-radius: 12px !important;
-    
+    background: var(--darkest) !important;
     color: var(--light) !important;
 }
 
@@ -507,8 +506,6 @@
 
 /* Стили для контактной информации */
 .contact-details-enhanced {
-/* Стили для контактной информации */
-.contact-details-enhanced {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
     border-radius: 15px;
@@ -517,7 +514,6 @@
 }
 
 .contact-details-enhanced h4 {
-.contact-details-enhanced h4 {
     font-size: 1.2rem;
     margin-bottom: 1.5rem;
     color: var(--light);
@@ -525,144 +521,27 @@
 }
 
 .contact-links-enhanced {
-.contact-links-enhanced {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 2rem;
     gap: 1rem;
     margin-bottom: 2rem;
 }
 
 .contact-item-enhanced {
-.contact-item-enhanced {
     display: flex;
     align-items: flex-start;
     gap: 1rem;
     padding: 1rem;
     background: rgba(255, 255, 255, 0.03);
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 1rem;
-    background: rgba(255, 255, 255, 0.03);
     border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.05);
     transition: all 0.3s ease;
 }
 
 .contact-item-enhanced:hover {
-.contact-item-enhanced:hover {
     background: rgba(37, 99, 235, 0.1);
-    border-color: rgba(37, 99, 235, 0.2);
     border-color: rgba(37, 99, 235, 0.2);
     transform: translateX(5px);
-}
-
-.contact-icon-wrapper-small {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    background: rgba(37, 99, 235, 0.1);
-    border-radius: 50%;
-    border: 1px solid rgba(37, 99, 235, 0.3);
-}
-
-.contact-icon-small {
-    font-size: 1.2rem;
-}
-
-.contact-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    flex: 1;
-}
-
-.contact-link {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--light);
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.contact-link:hover {
-    color: var(--primary);
-}
-
-.contact-description {
-    color: var(--gray);
-    font-size: 0.85rem;
-}
-
-/* Стили для времени работы */
-.work-schedule {
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 10px;
-    padding: 1.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.work-schedule h5 {
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-    color: var(--light);
-    text-align: center;
-}
-
-.schedule-items {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-    margin-bottom: 1rem;
-}
-
-.schedule-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.schedule-item:last-child {
-    border-bottom: none;
-}
-
-.schedule-days {
-    color: var(--light);
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
-.schedule-time {
-    color: var(--gray);
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
-.support-note-small {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: rgba(37, 99, 235, 0.1);
-    padding: 0.7rem 1rem;
-    border-radius: 8px;
-    border-left: 3px solid var(--primary);
-}
-
-.support-note-small .note-icon {
-    font-size: 1rem;
-}
-
-.support-note-small span {
-    color: var(--light);
-    font-size: 0.85rem;
-    font-weight: 500;
 }
 
 .contact-icon-wrapper-small {
@@ -858,7 +737,7 @@
 }
 
 .faq-item-enhanced.active .faq-answer-enhanced {
-    padding: 1rem 2rem 2rem;
+    padding: 0 2rem 2rem;
     max-height: 500px;
 }
 
@@ -871,6 +750,7 @@
 /* CTA Section */
 .cta-contacts {
     padding: 6rem 0;
+    background: linear-gradient(135deg, var(--darker) 0%, var(--darkest) 100%);
     position: relative;
     overflow: hidden;
 }
@@ -883,8 +763,8 @@
     right: 0;
     bottom: 0;
     background: 
-        radial-gradient(circle at 30% 70%, rgba(235, 182, 37, 0.103) 0%, transparent 50%),
-        radial-gradient(circle at 70% 30%, rgba(235, 182, 37, 0.103) 0%, transparent 50%);
+        radial-gradient(circle at 30% 70%, rgba(37, 99, 235, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 70% 30%, rgba(59, 130, 246, 0.15) 0%, transparent 50%);
     pointer-events: none;
 }
 
@@ -1003,32 +883,6 @@
     .work-schedule {
         padding: 1.2rem;
     }
-    
-    .map-placeholder-enhanced {
-        height: 300px;
-        min-height: 300px;
-    }
-    
-    .contact-item-enhanced {
-        padding: 0.8rem;
-    }
-    
-    .contact-icon-wrapper-small {
-        width: 35px;
-        height: 35px;
-    }
-    
-    .contact-icon-small {
-        font-size: 1rem;
-    }
-    
-    .contact-link {
-        font-size: 0.95rem;
-    }
-    
-    .work-schedule {
-        padding: 1.2rem;
-    }
 }
 
 @media (max-width: 480px) {
@@ -1049,7 +903,6 @@
     }
     
     .additional-info-enhanced,
-    .contact-details-enhanced {
     .contact-details-enhanced {
         padding: 1.5rem;
     }
@@ -1072,34 +925,6 @@
     .cta-content-contacts p {
         font-size: 1.1rem;
     }
-    
-    .map-placeholder-enhanced {
-        height: 250px;
-        min-height: 250px;
-    }
-    
-    .contact-item-enhanced {
-        flex-direction: column;
-        text-align: center;
-        gap: 0.8rem;
-    }
-    
-    .contact-icon-wrapper-small {
-        align-self: center;
-    }
-    
-    .schedule-item {
-        flex-direction: column;
-        gap: 0.3rem;
-        text-align: center;
-    }
-    
-    .schedule-days,
-    .schedule-time {
-        text-align: center;
-    }
-}
-
     
     .map-placeholder-enhanced {
         height: 250px;
