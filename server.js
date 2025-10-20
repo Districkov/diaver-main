@@ -7,21 +7,24 @@ const multer = require('multer');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 🔧 ПРАВИЛЬНЫЕ ПУТИ ДЛЯ RENDER (сервер в корне)
+// 🔧 ПРАВИЛЬНЫЕ ПУТИ ДЛЯ РЕАЛЬНЫХ ДАННЫХ
 const FRONTEND_DIR = path.join(__dirname, 'frontend');
-const DATA_DIR = path.join(__dirname, 'data');
+const DATA_DIR = path.join(__dirname, 'backend', 'data');
 const PROJECTS_FILE = path.join(DATA_DIR, 'projects.json');
 const LEADS_FILE = path.join(DATA_DIR, 'leads.json');
 const PRESENTATIONS_FILE = path.join(DATA_DIR, 'presentations.json');
-const PRESENTATIONS_DIR = path.join(FRONTEND_DIR, 'assets/presentations');
+const PRESENTATIONS_DIR = path.join(FRONTEND_DIR, 'assets', 'presentations');
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.static(FRONTEND_DIR));
 
-// Создаем необходимые директории при запуске
-function initializeDirectories() {
+// 🔧 ФУНКЦИЯ ДЛЯ ЗАГРУЗКИ РЕАЛЬНЫХ ДАННЫХ
+function initializeRealData() {
+  console.log('🔄 Initializing real data...');
+  
+  // Создаем директории если нет
   const dirs = [DATA_DIR, PRESENTATIONS_DIR];
   dirs.forEach(dir => {
     if (!fs.existsSync(dir)) {
@@ -29,22 +32,34 @@ function initializeDirectories() {
       console.log(`✅ Created directory: ${dir}`);
     }
   });
-}
 
-// Инициализация файлов данных
-function initializeDataFiles() {
+  // 🔧 КОПИРУЕМ РЕАЛЬНЫЕ ДАННЫЕ ИЗ РЕПОЗИТОРИЯ
+  const sourceProjectsFile = path.join(__dirname, 'backend', 'data', 'projects.json');
+  
+  // Если файл проектов существует в репозитории - копируем в рабочую директорию
+  if (fs.existsSync(sourceProjectsFile)) {
+    if (!fs.existsSync(PROJECTS_FILE)) {
+      console.log('📁 Copying real projects data...');
+      const projectsData = fs.readFileSync(sourceProjectsFile, 'utf8');
+      fs.writeFileSync(PROJECTS_FILE, projectsData);
+      const projectsCount = JSON.parse(projectsData).length;
+      console.log(`✅ Copied ${projectsCount} real projects`);
+    } else {
+      console.log('📁 Real projects data already exists');
+    }
+  } else {
+    console.log('❌ Source projects file not found in repository');
+  }
+  
+  // Создаем пустые файлы если их нет
   const files = [
-    { path: PROJECTS_FILE, default: '[]' },
     { path: LEADS_FILE, default: '[]' },
     { 
       path: PRESENTATIONS_FILE, 
       default: JSON.stringify({
         presentations: {},
         categories: ["accounting", "government", "business", "finance", "education"],
-        settings: {
-          uploadPath: "/assets/presentations/",
-          allowedFormats: [".pdf", ".pptx", ".ppt"]
-        }
+        settings: {}
       }, null, 2)
     }
   ];
@@ -52,50 +67,38 @@ function initializeDataFiles() {
   files.forEach(({ path: filePath, default: defaultData }) => {
     if (!fs.existsSync(filePath)) {
       fs.writeFileSync(filePath, defaultData);
-      console.log(`✅ Created data file: ${filePath}`);
+      console.log(`✅ Created file: ${path.basename(filePath)}`);
     }
   });
 }
 
-// Вызываем инициализацию при запуске
-initializeDirectories();
-initializeDataFiles();
-
-// Настройка multer для загрузки файлов
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    if (!fs.existsSync(PRESENTATIONS_DIR)) {
-      fs.mkdirSync(PRESENTATIONS_DIR, { recursive: true });
-    }
-    cb(null, PRESENTATIONS_DIR);
-  },
-  filename: (req, file, cb) => {
-    const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname);
-    cb(null, uniqueName);
-  }
-});
-
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 50 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => {
-    const allowedFormats = ['.pdf', '.pptx', '.ppt'];
-    const fileExt = path.extname(file.originalname).toLowerCase();
-    if (allowedFormats.includes(fileExt)) {
-      cb(null, true);
-    } else {
-      cb(new Error('Разрешены только PDF, PPTX и PPT файлы'));
-    }
-  }
-});
+// Вызываем инициализацию
+initializeRealData();
 
 // Функции для работы с данными
 const readProjects = () => {
   try {
+    console.log(`📁 Reading projects from: ${PROJECTS_FILE}`);
+    console.log(`📁 File exists: ${fs.existsSync(PROJECTS_FILE)}`);
+    
+    if (!fs.existsSync(PROJECTS_FILE)) {
+      console.log('❌ Projects file not found, reinitializing...');
+      initializeRealData();
+      return [];
+    }
+    
     const data = fs.readFileSync(PROJECTS_FILE, 'utf8');
-    return JSON.parse(data);
+    const projects = JSON.parse(data);
+    console.log(`✅ Loaded ${projects.length} real projects`);
+    
+    // Логируем названия проектов для проверки
+    projects.forEach((project, index) => {
+      console.log(`   ${index + 1}. ${project.title}`);
+    });
+    
+    return projects;
   } catch (error) {
-    console.error('Error reading projects:', error);
+    console.error('❌ Error reading projects:', error);
     return [];
   }
 };
@@ -103,6 +106,7 @@ const readProjects = () => {
 const writeProjects = (projects) => {
   try {
     fs.writeFileSync(PROJECTS_FILE, JSON.stringify(projects, null, 2));
+    console.log(`✅ Saved ${projects.length} projects`);
   } catch (error) {
     console.error('Error writing projects:', error);
     throw error;
@@ -146,6 +150,34 @@ const writePresentations = (data) => {
     throw error;
   }
 };
+
+// Настройка multer для загрузки файлов
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    if (!fs.existsSync(PRESENTATIONS_DIR)) {
+      fs.mkdirSync(PRESENTATIONS_DIR, { recursive: true });
+    }
+    cb(null, PRESENTATIONS_DIR);
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname);
+    cb(null, uniqueName);
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 50 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const allowedFormats = ['.pdf', '.pptx', '.ppt'];
+    const fileExt = path.extname(file.originalname).toLowerCase();
+    if (allowedFormats.includes(fileExt)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Разрешены только PDF, PPTX и PPT файлы'));
+    }
+  }
+});
 
 // ==================== API ДЛЯ ПРЕЗЕНТАЦИЙ ====================
 
@@ -314,6 +346,7 @@ function generateId(title) {
 
 // ==================== СУЩЕСТВУЮЩИЕ API ====================
 
+// API для проектов
 app.get('/api/projects', (req, res) => {
   try {
     let projects = readProjects();
@@ -483,6 +516,30 @@ app.post('/api/contact', (req, res) => {
   }
 });
 
+// 🔧 DEBUG МАРШРУТ ДЛЯ ПРОВЕРКИ ДАННЫХ
+app.get('/api/debug', (req, res) => {
+  try {
+    const debugInfo = {
+      server: 'Running',
+      timestamp: new Date().toISOString(),
+      paths: {
+        projectsFile: PROJECTS_FILE,
+        projectsFileExists: fs.existsSync(PROJECTS_FILE),
+        dataDir: DATA_DIR,
+        dataDirExists: fs.existsSync(DATA_DIR),
+        frontendDir: FRONTEND_DIR
+      },
+      projects: {
+        count: readProjects().length,
+        data: readProjects()
+      }
+    };
+    res.json(debugInfo);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Статические маршруты для страниц
 app.get('/', (req, res) => {
   res.sendFile(path.join(FRONTEND_DIR, 'index.html'));
@@ -544,6 +601,7 @@ app.listen(PORT, () => {
   console.log(`   🔧 Админка: http://localhost:${PORT}/admin`);
   console.log(`   💡 Решения: http://localhost:${PORT}/solutions`);
   console.log(`   📞 Контакты: http://localhost:${PORT}/contacts`);
+  console.log(`   🐛 Debug: http://localhost:${PORT}/api/debug`);
   console.log('🎯 API endpoints:');
   console.log('   GET  /api/projects');
   console.log('   POST /api/presentations');
