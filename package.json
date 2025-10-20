@@ -2,10 +2,10 @@
   "name": "diaver-website",
   "version": "1.0.0",
   "description": "Официальный сайт ДИАВЕР с админ-панелью",
-  "main": "backend/server.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node backend/server.js",
-    "dev": "nodemon backend/server.js",
+    "start": "node server.js",
+    "dev": "nodemon server.js",
     "build": "echo 'No build step required for HTML project'"
   },
   "keywords": ["diaver", "website", "admin", "presentations"],

@@ -7,9 +7,8 @@ const multer = require('multer');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Определяем корневую директорию в зависимости от среды
-const isProduction = process.env.NODE_ENV === 'production';
-const rootDir = isProduction ? __dirname : path.join(__dirname, '..');
+// 🔧 ИСПРАВЛЕННЫЕ ПУТИ ДЛЯ RENDER.COM
+const rootDir = __dirname;
 const FRONTEND_DIR = path.join(rootDir, 'frontend');
 
 // Middleware
@@ -17,8 +16,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(FRONTEND_DIR));
 
-// Пути к файлам данных (адаптированные для продакшена)
-const DATA_DIR = path.join(rootDir, 'backend/data');
+// 🔧 ИСПРАВЛЕННЫЕ ПУТИ ДЛЯ ДАННЫХ
+const DATA_DIR = path.join(rootDir, 'data');
 const PROJECTS_FILE = path.join(DATA_DIR, 'projects.json');
 const LEADS_FILE = path.join(DATA_DIR, 'leads.json');
 const PRESENTATIONS_FILE = path.join(DATA_DIR, 'presentations.json');
@@ -542,19 +541,24 @@ app.use('/api/*', (req, res) => {
   res.status(404).json({ error: 'API endpoint not found: ' + req.originalUrl });
 });
 
-// Обработка 404 для страниц
+// 🔧 ИСПРАВЛЕННАЯ ОБРАБОТКА 404 ДЛЯ СТРАНИЦ
 app.use('*', (req, res) => {
-  res.status(404).sendFile(path.join(FRONTEND_DIR, 'pages/404.html'));
+  // Пытаемся отдать index.html для SPA маршрутов
+  res.sendFile(path.join(FRONTEND_DIR, 'index.html'), (err) => {
+    if (err) {
+      res.status(404).send('Страница не найдена');
+    }
+  });
 });
 
 app.listen(PORT, () => {
   console.log(`🚀 Сервер запущен на порту ${PORT}`);
   console.log(`📁 Корневая директория: ${rootDir}`);
-  console.log(`🌐 Режим: ${isProduction ? 'PRODUCTION' : 'DEVELOPMENT'}`);
   console.log(`📁 Статические файлы: ${FRONTEND_DIR}`);
   console.log(`💾 Данные: ${DATA_DIR}`);
   console.log(`📊 Презентации: ${PRESENTATIONS_DIR}`);
   console.log(`🌐 Главная: http://localhost:${PORT}`);
   console.log(`🔧 Админка: http://localhost:${PORT}/admin`);
   console.log(`💡 Решения: http://localhost:${PORT}/solutions`);
+  console.log(`⚡ Режим: ${process.env.NODE_ENV || 'development'}`);
 });
