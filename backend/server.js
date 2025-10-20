@@ -7,19 +7,71 @@ const multer = require('multer');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Определяем корневую директорию в зависимости от среды
+const isProduction = process.env.NODE_ENV === 'production';
+const rootDir = isProduction ? __dirname : path.join(__dirname, '..');
+const FRONTEND_DIR = path.join(rootDir, 'frontend');
+
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../frontend')));
+app.use(express.static(FRONTEND_DIR));
+
+// Пути к файлам данных (адаптированные для продакшена)
+const DATA_DIR = path.join(rootDir, 'backend/data');
+const PROJECTS_FILE = path.join(DATA_DIR, 'projects.json');
+const LEADS_FILE = path.join(DATA_DIR, 'leads.json');
+const PRESENTATIONS_FILE = path.join(DATA_DIR, 'presentations.json');
+const PRESENTATIONS_DIR = path.join(FRONTEND_DIR, 'assets/presentations');
+
+// Создаем необходимые директории при запуске
+function initializeDirectories() {
+  const dirs = [DATA_DIR, PRESENTATIONS_DIR];
+  dirs.forEach(dir => {
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+      console.log(`✅ Created directory: ${dir}`);
+    }
+  });
+}
+
+// Инициализация файлов данных
+function initializeDataFiles() {
+  const files = [
+    { path: PROJECTS_FILE, default: '[]' },
+    { path: LEADS_FILE, default: '[]' },
+    { 
+      path: PRESENTATIONS_FILE, 
+      default: JSON.stringify({
+        presentations: {},
+        categories: ["accounting", "government", "business", "finance", "education"],
+        settings: {
+          uploadPath: "/assets/presentations/",
+          allowedFormats: [".pdf", ".pptx", ".ppt"]
+        }
+      }, null, 2)
+    }
+  ];
+
+  files.forEach(({ path: filePath, default: defaultData }) => {
+    if (!fs.existsSync(filePath)) {
+      fs.writeFileSync(filePath, defaultData);
+      console.log(`✅ Created data file: ${filePath}`);
+    }
+  });
+}
+
+// Вызываем инициализацию при запуске
+initializeDirectories();
+initializeDataFiles();
 
 // Настройка multer для загрузки файлов
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, '../frontend/assets/presentations');
-    if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath, { recursive: true });
+    if (!fs.existsSync(PRESENTATIONS_DIR)) {
+      fs.mkdirSync(PRESENTATIONS_DIR, { recursive: true });
     }
-    cb(null, uploadPath);
+    cb(null, PRESENTATIONS_DIR);
   },
   filename: (req, file, cb) => {
     // Генерируем уникальное имя файла
@@ -42,21 +94,9 @@ const upload = multer({
   }
 });
 
-// Пути к файлам данных
-const PROJECTS_FILE = path.join(__dirname, 'data/projects.json');
-const LEADS_FILE = path.join(__dirname, 'data/leads.json');
-const PRESENTATIONS_FILE = path.join(__dirname, 'data/presentations.json');
-const PRESENTATIONS_DIR = path.join(__dirname, '../frontend/assets/presentations');
-
 // Функции для работы с данными
 const readProjects = () => {
   try {
-    if (!fs.existsSync(path.dirname(PROJECTS_FILE))) {
-      fs.mkdirSync(path.dirname(PROJECTS_FILE), { recursive: true });
-    }
-    if (!fs.existsSync(PROJECTS_FILE)) {
-      fs.writeFileSync(PROJECTS_FILE, '[]');
-    }
     const data = fs.readFileSync(PROJECTS_FILE, 'utf8');
     return JSON.parse(data);
   } catch (error) {
@@ -76,12 +116,6 @@ const writeProjects = (projects) => {
 
 const readLeads = () => {
   try {
-    if (!fs.existsSync(path.dirname(LEADS_FILE))) {
-      fs.mkdirSync(path.dirname(LEADS_FILE), { recursive: true });
-    }
-    if (!fs.existsSync(LEADS_FILE)) {
-      fs.writeFileSync(LEADS_FILE, '[]');
-    }
     const data = fs.readFileSync(LEADS_FILE, 'utf8');
     return JSON.parse(data);
   } catch (error) {
@@ -101,20 +135,6 @@ const writeLeads = (leads) => {
 
 const readPresentations = () => {
   try {
-    if (!fs.existsSync(path.dirname(PRESENTATIONS_FILE))) {
-      fs.mkdirSync(path.dirname(PRESENTATIONS_FILE), { recursive: true });
-    }
-    if (!fs.existsSync(PRESENTATIONS_FILE)) {
-      const defaultData = {
-        presentations: {},
-        categories: ["accounting", "government", "business", "finance", "education"],
-        settings: {
-          uploadPath: "/assets/presentations/",
-          allowedFormats: [".pdf", ".pptx", ".ppt"]
-        }
-      };
-      fs.writeFileSync(PRESENTATIONS_FILE, JSON.stringify(defaultData, null, 2));
-    }
     const data = fs.readFileSync(PRESENTATIONS_FILE, 'utf8');
     return JSON.parse(data);
   } catch (error) {
@@ -131,11 +151,6 @@ const writePresentations = (data) => {
     throw error;
   }
 };
-
-// Создаем папку для презентаций если не существует
-if (!fs.existsSync(PRESENTATIONS_DIR)) {
-  fs.mkdirSync(PRESENTATIONS_DIR, { recursive: true });
-}
 
 // ==================== API ДЛЯ ПРЕЗЕНТАЦИЙ ====================
 
@@ -306,8 +321,6 @@ app.get('/api/presentations/categories', (req, res) => {
   }
 });
 
-
-
 // Вспомогательная функция для генерации ID
 function generateId(title) {
   return title.toLowerCase()
@@ -421,7 +434,11 @@ app.post('/api/admin/login', (req, res) => {
   try {
     const { username, password } = req.body;
     
-    if (username === 'admin' && password === 'admin') {
+    // В продакшене используйте переменные окружения!
+    const adminUser = process.env.ADMIN_USERNAME || 'admin';
+    const adminPass = process.env.ADMIN_PASSWORD || 'admin';
+    
+    if (username === adminUser && password === adminPass) {
       res.json({ 
         success: true, 
         message: 'Успешный вход',
@@ -487,27 +504,27 @@ app.post('/api/contact', (req, res) => {
 
 // Статические маршруты для страниц
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+  res.sendFile(path.join(FRONTEND_DIR, 'index.html'));
 });
 
 app.get('/contacts', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/pages/contacts.html'));
+  res.sendFile(path.join(FRONTEND_DIR, 'pages/contacts.html'));
 });
 
 app.get('/products', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/pages/products.html'));
+  res.sendFile(path.join(FRONTEND_DIR, 'pages/products.html'));
 });
 
 app.get('/solutions', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/pages/solutions.html'));
+  res.sendFile(path.join(FRONTEND_DIR, 'pages/solutions.html'));
 });
 
 app.get('/company', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/pages/company.html'));
+  res.sendFile(path.join(FRONTEND_DIR, 'pages/company.html'));
 });
 
 app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/pages/admin.html'));
+  res.sendFile(path.join(FRONTEND_DIR, 'pages/admin.html'));
 });
 
 // Обработка ошибок multer
@@ -527,20 +544,17 @@ app.use('/api/*', (req, res) => {
 
 // Обработка 404 для страниц
 app.use('*', (req, res) => {
-  res.status(404).send('Страница не найдена');
+  res.status(404).sendFile(path.join(FRONTEND_DIR, 'pages/404.html'));
 });
 
 app.listen(PORT, () => {
   console.log(`🚀 Сервер запущен на порту ${PORT}`);
-  console.log(`📁 Статические файлы: ${path.join(__dirname, '../frontend')}`);
-  console.log(`💾 Данные: ${path.dirname(PROJECTS_FILE)}`);
+  console.log(`📁 Корневая директория: ${rootDir}`);
+  console.log(`🌐 Режим: ${isProduction ? 'PRODUCTION' : 'DEVELOPMENT'}`);
+  console.log(`📁 Статические файлы: ${FRONTEND_DIR}`);
+  console.log(`💾 Данные: ${DATA_DIR}`);
   console.log(`📊 Презентации: ${PRESENTATIONS_DIR}`);
   console.log(`🌐 Главная: http://localhost:${PORT}`);
   console.log(`🔧 Админка: http://localhost:${PORT}/admin`);
   console.log(`💡 Решения: http://localhost:${PORT}/solutions`);
-  console.log('🎯 Доступные API презентаций:');
-  console.log('   GET  /api/presentations - все презентации');
-  console.log('   POST /api/presentations - создать презентацию (с файлом)');
-  console.log('   PUT  /api/presentations/:id - обновить презентацию');
-  console.log('   DELETE /api/presentations/:id - удалить презентацию');
 });

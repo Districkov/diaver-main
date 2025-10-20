@@ -187,6 +187,7 @@
 }
 
 /* Logos Slider - Бесконечная непрерывная версия */
+/* Logos Slider - Бесконечная непрерывная версия */
 .logos-slider {
     position: relative;
     width: 100%;
@@ -199,18 +200,9 @@
     position: relative;
 }
 
-.slider-container {
-    display: flex;
-    width: fit-content;
-}
-
 .slider-track {
     display: flex;
-<<<<<<< HEAD:frontend/css/components/cards.css
     animation: slide 45s linear infinite;
-=======
-    animation: slide 45s linear infinite; /* Увеличена скорость до 45 секунд */
->>>>>>> b465b5588c7daa01c2715bee740db9882e0062f3:css/components/cards.css
     gap: 4rem;
     padding: 2rem 0;
 }
@@ -221,6 +213,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 300px;
+    height: 150px;
     width: 300px;
     height: 150px;
     padding: 15px 25px;
@@ -245,6 +239,7 @@
 /* Tooltip */
 .logo-slide::before {
     content: attr(data-tooltip);
+    content: attr(data-tooltip);
     position: absolute;
     bottom: 100%;
     left: 50%;
@@ -268,10 +263,6 @@
     visibility: visible;
     bottom: calc(100% + 10px);
 }
-<<<<<<< HEAD:frontend/css/components/cards.css
-=======
- 
->>>>>>> b465b5588c7daa01c2715bee740db9882e0062f3:css/components/cards.css
 
 .logo-slide:hover img {
     filter: grayscale(0%) brightness(1);
@@ -279,6 +270,7 @@
     transform: scale(1.1);
 }
 
+/* Бесконечная анимация - плавная и непрерывная */
 /* Бесконечная анимация - плавная и непрерывная */
 @keyframes slide {
     0% {
@@ -298,10 +290,19 @@
     }
 }
 
+@media (max-width: 1200px) {
+    .process-steps {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        padding: 0 2rem;
+    }
+}
+
 @media (max-width: 968px) {
     .process-steps {
         grid-template-columns: 1fr;
         gap: 1.5rem;
+        max-width: 500px;
         max-width: 500px;
     }
     
@@ -328,11 +329,7 @@
     
     .slider-track {
         gap: 3rem;
-<<<<<<< HEAD:frontend/css/components/cards.css
         animation-duration: 35s;
-=======
-        animation-duration: 35s; /* Ускорение для планшетов */
->>>>>>> b465b5588c7daa01c2715bee740db9882e0062f3:css/components/cards.css
     }
     
     @keyframes slide {
@@ -360,6 +357,10 @@
         font-size: 1.1rem;
     }
     
+    .cta-description {
+        font-size: 1.1rem;
+    }
+    
     .logo-slide {
         width: 120px;
         height: 60px;
@@ -368,11 +369,7 @@
     
     .slider-track {
         gap: 2.5rem;
-<<<<<<< HEAD:frontend/css/components/cards.css
         animation-duration: 30s;
-=======
-        animation-duration: 30s; /* Ускорение для мобильных */
->>>>>>> b465b5588c7daa01c2715bee740db9882e0062f3:css/components/cards.css
     }
     
     @keyframes slide {
@@ -403,6 +400,22 @@
         font-size: 1.8rem;
     }
     
+    .process-step {
+        padding: 1.5rem;
+    }
+    
+    .step-number {
+        font-size: 2.5rem;
+    }
+    
+    .cta-content-advanced {
+        padding: 0 1rem;
+    }
+    
+    .cta-content-advanced h2 {
+        font-size: 1.8rem;
+    }
+    
     .logo-slide {
         width: 100px;
         height: 50px;
@@ -411,11 +424,7 @@
     
     .slider-track {
         gap: 2rem;
-<<<<<<< HEAD:frontend/css/components/cards.css
         animation-duration: 25s;
-=======
-        animation-duration: 25s; /* Еще больше ускорение для маленьких экранов */
->>>>>>> b465b5588c7daa01c2715bee740db9882e0062f3:css/components/cards.css
     }
     
     @keyframes slide {
@@ -443,6 +452,19 @@
         font-size: 1rem;
     }
     
+    .process-section,
+    .cta-showcase {
+        padding: 3rem 0;
+    }
+    
+    .cta-content-advanced h2 {
+        font-size: 1.6rem;
+    }
+    
+    .cta-description {
+        font-size: 1rem;
+    }
+    
     .logo-slide {
         width: 90px;
         height: 45px;
@@ -451,11 +473,7 @@
     
     .slider-track {
         gap: 1.5rem;
-<<<<<<< HEAD:frontend/css/components/cards.css
         animation-duration: 20s;
-=======
-        animation-duration: 20s; /* Максимальное ускорение для очень маленьких экранов */
->>>>>>> b465b5588c7daa01c2715bee740db9882e0062f3:css/components/cards.css
     }
     
     @keyframes slide {
@@ -471,7 +489,6 @@
     .trusted-label {
         margin-bottom: 2rem;
         font-size: 0.8rem;
-<<<<<<< HEAD:frontend/css/components/cards.css
     }
 }
 
@@ -481,31 +498,6 @@
         animation: none;
         justify-content: center;
         flex-wrap: wrap;
-    }
-    
-    .slider-container {
-        width: 100%;
-        justify-content: center;
-=======
-    }
-    
-    .logos-slider {
-        mask: linear-gradient(90deg, transparent, white 2%, white 98%, transparent);
->>>>>>> b465b5588c7daa01c2715bee740db9882e0062f3:css/components/cards.css
-    }
-}
-
-/* Поддержка prefers-reduced-motion */
-@media (prefers-reduced-motion: reduce) {
-    .slider-track {
-        animation: none;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-    
-    .logos-slider {
-        mask: none;
-        overflow: visible;
     }
     
     .slider-container {

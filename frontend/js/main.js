@@ -31,39 +31,43 @@ class DiaverApp {
         this.components.set('footer', this.getFallbackFooter());
     }
 
-    getFallbackHeader() {
-        const isIndexPage = this.isIndexPage();
-        const basePath = isIndexPage ? 'pages/' : '';
-        
-        return `
-            <nav class="navbar">
-                <div class="container">
-                    <div class="nav-brand">
-                        <a href="${isIndexPage ? 'index.html' : '../index.html'}" class="logo">
-                            <img src="${isIndexPage ? 'assets/images/logo.png' : '../assets/images/logo.png'}" 
-                                 alt="ДИАВЕР" 
-                                 class="logo-image">
-                        </a>
-                    </div>
-                    <div class="nav-menu">
-                        <a href="${isIndexPage ? 'index.html' : '../index.html'}" class="nav-link">Главная</a>
-                        <a href="${basePath}solutions.html" class="nav-link">Решения</a>
-                        <a href="${basePath}products.html" class="nav-link">Продукты</a>
-                        <a href="${basePath}company.html" class="nav-link">Компания</a>
-                        <a href="${basePath}contacts.html" class="nav-link">Контакты</a>
-                    </div>
-                    <div class="nav-actions">
-                        <a href="tel:+78001234567" class="nav-phone">8 800 123-45-67</a>
-                        <button class="nav-toggle" aria-label="Меню">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </button>
-                    </div>
+getFallbackHeader() {
+    const isIndexPage = this.isIndexPage();
+    const basePath = isIndexPage ? 'pages/' : '';
+    
+    return `
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <a href="${isIndexPage ? 'index.html' : '../index.html'}" class="logo">
+                        <img src="${isIndexPage ? 'assets/images/logo.png' : '../assets/images/logo.png'}" 
+                             alt="ДИАВЕР" 
+                             class="logo-image">
+                    </a>
                 </div>
-            </nav>
-        `;
-    }
+                <div class="nav-menu">
+                    <a href="${isIndexPage ? 'index.html' : '../index.html'}" class="nav-link">Главная</a>
+                    <a href="${basePath}solutions.html" class="nav-link">Решения</a>
+                    <a href="${basePath}products.html" class="nav-link">Продукты</a>
+                    <a href="${basePath}company.html" class="nav-link">Компания</a>
+                    <a href="${basePath}contacts.html" class="nav-link">Контакты</a>
+                    <a href="${basePath}admin.html" class="nav-link admin-link">
+                        <span>⚙️</span>
+                        Админка
+                    </a>
+                </div>
+                <div class="nav-actions">
+                    <a href="tel:+78001234567" class="nav-phone">8 800 123-45-67</a>
+                    <button class="nav-toggle" aria-label="Меню">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    `;
+}
 
     getFallbackFooter() {
         const isIndexPage = this.isIndexPage();

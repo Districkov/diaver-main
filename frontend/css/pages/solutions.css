@@ -108,10 +108,7 @@
 /* Solutions Detailed Grid */
 .solutions-showcase-detailed {
     padding: 6rem 0;
-<<<<<<< HEAD:frontend/css/pages/solutions.css
     background: #0a0a0a;
-=======
->>>>>>> b465b5588c7daa01c2715bee740db9882e0062f3:css/pages/solutions.css
 }
 
 .section-header-enhanced {
@@ -701,7 +698,7 @@
     transform: translateY(-2px);
 }
 
-/* Остальные секции остаются без изменений */
+/* Остальные секции */
 .technology-platform {
     padding: 6rem 0;
     background: #0a0a0a;
@@ -1068,20 +1065,4 @@
     .process-step {
         padding: 1.5rem;
     }
-<<<<<<< HEAD:frontend/css/pages/solutions.css
 }
-=======
-}
-/* Enhancements for PDF buttons */
-.btn-view-pdf {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-/* Ensure PDF modal z-index works */
-.solution-detailed-card {
-    position: relative;
-    z-index: 1;
-}
->>>>>>> b465b5588c7daa01c2715bee740db9882e0062f3:css/pages/solutions.css

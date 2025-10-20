@@ -1,7 +1,7 @@
 // Конфигурация аутентификации
 const AUTH_CONFIG = {
     username: 'admin',
-    password: 'diaver2024',
+    password: 'Diaver',
     tokenKey: 'adminAuthToken',
     apiBase: '/api/admin'
 };
