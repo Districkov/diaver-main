@@ -194,22 +194,22 @@
     mask: linear-gradient(
         90deg,
         transparent,
-        white 15%,
-        white 85%,
+        white 10%,
+        white 90%,
         transparent
     );
     -webkit-mask: linear-gradient(
         90deg,
         transparent,
-        white 15%,
-        white 85%,
+        white 10%,
+        white 90%,
         transparent
     );
 }
 
 .slider-track {
     display: flex;
-    animation: slideInfinite 40s linear infinite;
+    animation: slideInfinite 30s linear infinite;
     gap: 4rem;
     padding: 2rem 0;
     width: max-content;
@@ -266,15 +266,14 @@
     font-weight: 500;
 }
 
-/* ИСПРАВЛЕННАЯ Анимация - правильный расчет для бесконечности */
+/* ИСПРАВЛЕННАЯ Анимация - для 7 логотипов */
 @keyframes slideInfinite {
     0% {
         transform: translateX(0);
     }
     100% {
-        /* 160px (ширина) + 4rem (gap) = 160px + 64px = 224px на элемент */
-        /* Умножаем на количество элементов в одной группе */
-        transform: translateX(calc(-224px * var(--logo-count, 5)));
+        /* 160px (ширина) + 4rem (64px gap) = 224px на элемент × 7 логотипов */
+        transform: translateX(calc(-224px * 7));
     }
 }
 
@@ -317,13 +316,13 @@
     
     .slider-track {
         gap: 3rem;
-        animation-duration: 35s;
+        animation-duration: 40s;
     }
     
     @keyframes slideInfinite {
         100% {
-            /* 140px + 3rem (48px) = 188px */
-            transform: translateX(calc(-188px * var(--logo-count, 5)));
+            /* 140px + 3rem (48px) = 188px × 7 */
+            transform: translateX(calc(-188px * 7));
         }
     }
 }
@@ -350,13 +349,13 @@
     
     .slider-track {
         gap: 2.5rem;
-        animation-duration: 30s;
+        animation-duration: 35s;
     }
     
     @keyframes slideInfinite {
         100% {
-            /* 120px + 2.5rem (40px) = 160px */
-            transform: translateX(calc(-160px * var(--logo-count, 5)));
+            /* 120px + 2.5rem (40px) = 160px × 7 */
+            transform: translateX(calc(-160px * 7));
         }
     }
 }
@@ -386,13 +385,13 @@
     
     .slider-track {
         gap: 2rem;
-        animation-duration: 25s;
+        animation-duration: 30s;
     }
     
     @keyframes slideInfinite {
         100% {
-            /* 100px + 2rem (32px) = 132px */
-            transform: translateX(calc(-132px * var(--logo-count, 5)));
+            /* 100px + 2rem (32px) = 132px × 7 */
+            transform: translateX(calc(-132px * 7));
         }
     }
 }
@@ -419,13 +418,13 @@
     
     .slider-track {
         gap: 1.5rem;
-        animation-duration: 20s;
+        animation-duration: 25s;
     }
     
     @keyframes slideInfinite {
         100% {
-            /* 90px + 1.5rem (24px) = 114px */
-            transform: translateX(calc(-114px * var(--logo-count, 5)));
+            /* 90px + 1.5rem (24px) = 114px × 7 */
+            transform: translateX(calc(-114px * 7));
         }
     }
     
