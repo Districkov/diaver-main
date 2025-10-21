@@ -209,7 +209,7 @@
 
 .slider-track {
     display: flex;
-    animation: slideInfinite s linear infinite;
+    animation: slideInfinite 60s linear infinite;
     gap: 4rem;
     padding: 2rem 0;
     width: max-content;
