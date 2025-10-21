@@ -186,7 +186,7 @@
     font-weight: 500;
 }
 
-/* Logos Slider - ИСПРАВЛЕННАЯ ВЕРСИЯ */
+/* Logos Slider - ИСПРАВЛЕННАЯ БЕСКОНЕЧНАЯ ВЕРСИЯ */
 .logos-slider {
     position: relative;
     width: 100%;
@@ -194,23 +194,23 @@
     mask: linear-gradient(
         90deg,
         transparent,
-        white 20%,
-        white 80%,
+        white 15%,
+        white 85%,
         transparent
     );
     -webkit-mask: linear-gradient(
         90deg,
         transparent,
-        white 20%,
-        white 80%,
+        white 15%,
+        white 85%,
         transparent
     );
 }
 
 .slider-track {
     display: flex;
-    animation: slideInfinite 25s linear infinite; /* Увеличил скорость */
-    gap: 3rem;
+    animation: slideInfinite 40s linear infinite;
+    gap: 4rem;
     padding: 2rem 0;
     width: max-content;
 }
@@ -221,9 +221,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 300px; /* Уменьшил размер */
-    height: 150px; /* Уменьшил размер */
-    padding: 10px 20px;
+    width: 300px;
+    height: 150px;
+    padding: 15px 25px;
     background: var(--bg-card);
     border-radius: var(--radius-md);
     transition: all var(--transition-normal);
@@ -266,13 +266,15 @@
     font-weight: 500;
 }
 
-/* ИСПРАВЛЕННАЯ Анимация - упрощенный расчет */
+/* ИСПРАВЛЕННАЯ Анимация - правильный расчет для бесконечности */
 @keyframes slideInfinite {
     0% {
         transform: translateX(0);
     }
     100% {
-        transform: translateX(calc(-160px * 8 - 3rem * 8)); /* Упрощенный расчет */
+        /* 160px (ширина) + 4rem (gap) = 160px + 64px = 224px на элемент */
+        /* Умножаем на количество элементов в одной группе */
+        transform: translateX(calc(-224px * var(--logo-count, 5)));
     }
 }
 
@@ -310,17 +312,18 @@
     .logo-slide {
         width: 140px;
         height: 70px;
-        padding: 10px 18px;
+        padding: 10px 20px;
     }
     
     .slider-track {
-        gap: 2.5rem;
-        animation-duration: 20s; /* Быстрее на мобильных */
+        gap: 3rem;
+        animation-duration: 35s;
     }
     
     @keyframes slideInfinite {
         100% {
-            transform: translateX(calc(-140px * 8 - 2.5rem * 8));
+            /* 140px + 3rem (48px) = 188px */
+            transform: translateX(calc(-188px * var(--logo-count, 5)));
         }
     }
 }
@@ -342,17 +345,18 @@
     .logo-slide {
         width: 120px;
         height: 60px;
-        padding: 8px 15px;
+        padding: 8px 16px;
     }
     
     .slider-track {
-        gap: 2rem;
-        animation-duration: 18s; /* Еще быстрее */
+        gap: 2.5rem;
+        animation-duration: 30s;
     }
     
     @keyframes slideInfinite {
         100% {
-            transform: translateX(calc(-120px * 8 - 2rem * 8));
+            /* 120px + 2.5rem (40px) = 160px */
+            transform: translateX(calc(-160px * var(--logo-count, 5)));
         }
     }
 }
@@ -381,13 +385,14 @@
     }
     
     .slider-track {
-        gap: 1.5rem;
-        animation-duration: 15s; /* Максимальная скорость */
+        gap: 2rem;
+        animation-duration: 25s;
     }
     
     @keyframes slideInfinite {
         100% {
-            transform: translateX(calc(-100px * 8 - 1.5rem * 8));
+            /* 100px + 2rem (32px) = 132px */
+            transform: translateX(calc(-132px * var(--logo-count, 5)));
         }
     }
 }
@@ -413,13 +418,14 @@
     }
     
     .slider-track {
-        gap: 1rem;
-        animation-duration: 12s; /* Очень быстро */
+        gap: 1.5rem;
+        animation-duration: 20s;
     }
     
     @keyframes slideInfinite {
         100% {
-            transform: translateX(calc(-90px * 8 - 1rem * 8));
+            /* 90px + 1.5rem (24px) = 114px */
+            transform: translateX(calc(-114px * var(--logo-count, 5)));
         }
     }
     
