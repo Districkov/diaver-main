@@ -24,6 +24,7 @@ class DiaverApp {
         this.initAnimations();
         this.fixHeaderOverlap();
         this.initScrollEffect();
+        this.initLogosSlider(); // Добавляем инициализацию слайдера
     }
 
     loadTemplates() {
@@ -31,43 +32,39 @@ class DiaverApp {
         this.components.set('footer', this.getFallbackFooter());
     }
 
-getFallbackHeader() {
-    const isIndexPage = this.isIndexPage();
-    const basePath = isIndexPage ? 'pages/' : '';
-    
-    return `
-        <nav class="navbar">
-            <div class="container">
-                <div class="nav-brand">
-                    <a href="${isIndexPage ? 'index.html' : '../index.html'}" class="logo">
-                        <img src="${isIndexPage ? 'assets/images/logo.png' : '../assets/images/logo.png'}" 
-                             alt="ДИАВЕР" 
-                             class="logo-image">
-                    </a>
+    getFallbackHeader() {
+        const isIndexPage = this.isIndexPage();
+        const basePath = isIndexPage ? 'pages/' : '';
+        
+        return `
+            <nav class="navbar">
+                <div class="container">
+                    <div class="nav-brand">
+                        <a href="${isIndexPage ? 'index.html' : '../index.html'}" class="logo">
+                            <img src="${isIndexPage ? 'assets/images/logo.png' : '../assets/images/logo.png'}" 
+                                 alt="ДИАВЕР" 
+                                 class="logo-image">
+                        </a>
+                    </div>
+                    <div class="nav-menu">
+                        <a href="${isIndexPage ? 'index.html' : '../index.html'}" class="nav-link">Главная</a>
+                        <a href="${basePath}solutions.html" class="nav-link">Решения</a>
+                        <a href="${basePath}products.html" class="nav-link">Продукты</a>
+                        <a href="${basePath}company.html" class="nav-link">Компания</a>
+                        <a href="${basePath}contacts.html" class="nav-link">Контакты</a>
+                    </div>
+                    <div class="nav-actions">
+                        <a href="tel:+78001234567" class="nav-phone">8 800 123-45-67</a>
+                        <button class="nav-toggle" aria-label="Меню">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                    </div>
                 </div>
-                <div class="nav-menu">
-                    <a href="${isIndexPage ? 'index.html' : '../index.html'}" class="nav-link">Главная</a>
-                    <a href="${basePath}solutions.html" class="nav-link">Решения</a>
-                    <a href="${basePath}products.html" class="nav-link">Продукты</a>
-                    <a href="${basePath}company.html" class="nav-link">Компания</a>
-                    <a href="${basePath}contacts.html" class="nav-link">Контакты</a>
-                    <a href="${basePath}admin.html" class="nav-link admin-link">
-                        <span>⚙️</span>
-                        Админка
-                    </a>
-                </div>
-                <div class="nav-actions">
-                    <a href="tel:+78001234567" class="nav-phone">8 800 123-45-67</a>
-                    <button class="nav-toggle" aria-label="Меню">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
-                </div>
-            </div>
-        </nav>
-    `;
-}
+            </nav>
+        `;
+    }
 
     getFallbackFooter() {
         const isIndexPage = this.isIndexPage();
@@ -277,6 +274,81 @@ getFallbackHeader() {
                 imageObserver.observe(img);
             });
         }
+    }
+
+    // Логотипы слайдер - улучшенная версия
+    initLogosSlider() {
+        console.log('🔄 Initializing logos slider...');
+        
+        const sliderTrack = document.querySelector('.slider-track');
+        const logoSlides = document.querySelectorAll('.logo-slide img');
+        
+        if (!sliderTrack) {
+            console.error('❌ Slider track not found');
+            return;
+        }
+        
+        console.log(`📁 Found ${logoSlides.length} logo images`);
+        
+        // Проверяем загрузку всех изображений
+        let loadedCount = 0;
+        const totalLogos = logoSlides.length;
+        
+        logoSlides.forEach((img, index) => {
+            const originalSrc = img.src;
+            
+            img.onload = function() {
+                loadedCount++;
+                console.log(`✅ Logo ${index + 1} loaded: ${originalSrc}`);
+                
+                // Если все изображения загружены, запускаем анимацию
+                if (loadedCount === totalLogos) {
+                    console.log('🎉 All logos loaded successfully!');
+                    startSliderAnimation();
+                }
+            };
+            
+            img.onerror = function() {
+                loadedCount++;
+                console.error(`❌ Logo ${index + 1} failed to load: ${originalSrc}`);
+                
+                // Создаем запасной контент
+                const parent = img.parentElement;
+                if (parent) {
+                    parent.style.backgroundColor = 'var(--bg-secondary)';
+                    parent.style.border = '1px dashed var(--border-primary)';
+                    parent.innerHTML = `<div style="color: var(--text-tertiary); font-size: 12px; text-align: center;">${img.alt || 'Logo'}</div>`;
+                }
+                
+                if (loadedCount === totalLogos) {
+                    console.log('⚠️ Some logos failed, but starting animation anyway');
+                    startSliderAnimation();
+                }
+            };
+            
+            // Проверяем уже загруженные изображения
+            if (img.complete) {
+                if (img.naturalHeight === 0) {
+                    img.onerror();
+                } else {
+                    img.onload();
+                }
+            }
+        });
+        
+        const startSliderAnimation = () => {
+            console.log('🚀 Starting slider animation...');
+            sliderTrack.style.animationPlayState = 'running';
+        };
+        
+        // Пауза при наведении для лучшего UX
+        sliderTrack.addEventListener('mouseenter', () => {
+            sliderTrack.style.animationPlayState = 'paused';
+        });
+        
+        sliderTrack.addEventListener('mouseleave', () => {
+            sliderTrack.style.animationPlayState = 'running';
+        });
     }
 
     initIntersectionObserver() {
