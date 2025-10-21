@@ -194,23 +194,23 @@
     mask: linear-gradient(
         90deg,
         transparent,
-        white 10%,
-        white 90%,
+        white 20%,
+        white 80%,
         transparent
     );
     -webkit-mask: linear-gradient(
         90deg,
         transparent,
-        white 10%,
-        white 90%,
+        white 20%,
+        white 80%,
         transparent
     );
 }
 
 .slider-track {
     display: flex;
-    animation: slideInfinite 60s linear infinite;
-    gap: 4rem;
+    animation: slideInfinite 25s linear infinite; /* Увеличил скорость */
+    gap: 3rem;
     padding: 2rem 0;
     width: max-content;
 }
@@ -221,13 +221,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 300px;
-    height: 150px;
-    padding: 15px 25px;
-    background: transparent;
+    width: 300px; /* Уменьшил размер */
+    height: 150px; /* Уменьшил размер */
+    padding: 10px 20px;
+    background: var(--bg-card);
     border-radius: var(--radius-md);
     transition: all var(--transition-normal);
-    border: 1px solid transparent;
+    border: 1px solid var(--border-primary);
     text-decoration: none;
     cursor: pointer;
     position: relative;
@@ -242,55 +242,38 @@
     opacity: 0.7;
 }
 
-
-
-.logo-slide:hover::before {
-    opacity: 1;
-    visibility: visible;
-    bottom: calc(100% + 10px);
-}
-
-
 .logo-slide:hover img {
     filter: grayscale(0%) brightness(1);
     opacity: 1;
     transform: scale(1.1);
 }
 
-/* ИСПРАВЛЕННАЯ Анимация - правильный расчет */
+/* Fallback для отсутствующих изображений */
+.logo-slide:not(:has(img[src]))::before,
+.logo-slide img[src=""]::before,
+.logo-slide img:not([src])::before {
+    content: "Лого";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-secondary);
+    border: 1px dashed var(--border-primary);
+    border-radius: var(--radius-md);
+    color: var(--text-tertiary);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* ИСПРАВЛЕННАЯ Анимация - упрощенный расчет */
 @keyframes slideInfinite {
     0% {
         transform: translateX(0);
     }
     100% {
-        transform: translateX(calc(-180px * 14 - 4rem * 14)); /* 14 элементов в дубликатах */
+        transform: translateX(calc(-160px * 8 - 3rem * 8)); /* Упрощенный расчет */
     }
-}
-
-/* Fallback для сломанных изображений */
-.logo-slide img:before {
-    content: " ";
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-color: var(--bg-secondary);
-    border: 1px dashed var(--border-primary);
-    border-radius: var(--radius-md);
-}
-
-.logo-slide img:after {
-    content: "Логотип " attr(alt);
-    display: block;
-    font-size: 12px;
-    color: var(--text-tertiary);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
 }
 
 /* Responsive Cards */
@@ -331,13 +314,13 @@
     }
     
     .slider-track {
-        gap: 3rem;
-        animation-duration: 35s;
+        gap: 2.5rem;
+        animation-duration: 20s; /* Быстрее на мобильных */
     }
     
     @keyframes slideInfinite {
         100% {
-            transform: translateX(calc(-140px * 14 - 3rem * 14));
+            transform: translateX(calc(-140px * 8 - 2.5rem * 8));
         }
     }
 }
@@ -363,13 +346,13 @@
     }
     
     .slider-track {
-        gap: 2.5rem;
-        animation-duration: 30s;
+        gap: 2rem;
+        animation-duration: 18s; /* Еще быстрее */
     }
     
     @keyframes slideInfinite {
         100% {
-            transform: translateX(calc(-120px * 14 - 2.5rem * 14));
+            transform: translateX(calc(-120px * 8 - 2rem * 8));
         }
     }
 }
@@ -398,13 +381,13 @@
     }
     
     .slider-track {
-        gap: 2rem;
-        animation-duration: 25s;
+        gap: 1.5rem;
+        animation-duration: 15s; /* Максимальная скорость */
     }
     
     @keyframes slideInfinite {
         100% {
-            transform: translateX(calc(-100px * 14 - 2rem * 14));
+            transform: translateX(calc(-100px * 8 - 1.5rem * 8));
         }
     }
 }
@@ -430,13 +413,13 @@
     }
     
     .slider-track {
-        gap: 1.5rem;
-        animation-duration: 20s;
+        gap: 1rem;
+        animation-duration: 12s; /* Очень быстро */
     }
     
     @keyframes slideInfinite {
         100% {
-            transform: translateX(calc(-90px * 14 - 1.5rem * 14));
+            transform: translateX(calc(-90px * 8 - 1rem * 8));
         }
     }
     
