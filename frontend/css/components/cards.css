@@ -186,24 +186,33 @@
     font-weight: 500;
 }
 
-/* Logos Slider - Бесконечная непрерывная версия */
+/* Logos Slider - ИСПРАВЛЕННАЯ ВЕРСИЯ */
 .logos-slider {
     position: relative;
     width: 100%;
     overflow: hidden;
-}
-
-.slider-container {
-    display: flex;
-    width: fit-content;
-    position: relative;
+    mask: linear-gradient(
+        90deg,
+        transparent,
+        white 10%,
+        white 90%,
+        transparent
+    );
+    -webkit-mask: linear-gradient(
+        90deg,
+        transparent,
+        white 10%,
+        white 90%,
+        transparent
+    );
 }
 
 .slider-track {
     display: flex;
-    animation: slide 45s linear infinite;
+    animation: slideInfinite s linear infinite;
     gap: 4rem;
     padding: 2rem 0;
+    width: max-content;
 }
 
 /* Logo Slides */
@@ -233,26 +242,7 @@
     opacity: 0.7;
 }
 
-/* Tooltip */
-.logo-slide::before {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius-md);
-    font-size: 0.8rem;
-    white-space: nowrap;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    border: 1px solid var(--border-primary);
-    box-shadow: var(--shadow-lg);
-    z-index: 10;
-}
+
 
 .logo-slide:hover::before {
     opacity: 1;
@@ -260,20 +250,47 @@
     bottom: calc(100% + 10px);
 }
 
+
 .logo-slide:hover img {
     filter: grayscale(0%) brightness(1);
     opacity: 1;
     transform: scale(1.1);
 }
 
-/* Бесконечная анимация - плавная и непрерывная */
-@keyframes slide {
+/* ИСПРАВЛЕННАЯ Анимация - правильный расчет */
+@keyframes slideInfinite {
     0% {
         transform: translateX(0);
     }
     100% {
-        transform: translateX(calc(-180px * 7 - 4rem * 7));
+        transform: translateX(calc(-180px * 14 - 4rem * 14)); /* 14 элементов в дубликатах */
     }
+}
+
+/* Fallback для сломанных изображений */
+.logo-slide img:before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: var(--bg-secondary);
+    border: 1px dashed var(--border-primary);
+    border-radius: var(--radius-md);
+}
+
+.logo-slide img:after {
+    content: "Логотип " attr(alt);
+    display: block;
+    font-size: 12px;
+    color: var(--text-tertiary);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
 }
 
 /* Responsive Cards */
@@ -318,9 +335,9 @@
         animation-duration: 35s;
     }
     
-    @keyframes slide {
+    @keyframes slideInfinite {
         100% {
-            transform: translateX(calc(-140px * 7 - 3rem * 7));
+            transform: translateX(calc(-140px * 14 - 3rem * 14));
         }
     }
 }
@@ -350,9 +367,9 @@
         animation-duration: 30s;
     }
     
-    @keyframes slide {
+    @keyframes slideInfinite {
         100% {
-            transform: translateX(calc(-120px * 7 - 2.5rem * 7));
+            transform: translateX(calc(-120px * 14 - 2.5rem * 14));
         }
     }
 }
@@ -385,9 +402,9 @@
         animation-duration: 25s;
     }
     
-    @keyframes slide {
+    @keyframes slideInfinite {
         100% {
-            transform: translateX(calc(-100px * 7 - 2rem * 7));
+            transform: translateX(calc(-100px * 14 - 2rem * 14));
         }
     }
 }
@@ -417,9 +434,9 @@
         animation-duration: 20s;
     }
     
-    @keyframes slide {
+    @keyframes slideInfinite {
         100% {
-            transform: translateX(calc(-90px * 7 - 1.5rem * 7));
+            transform: translateX(calc(-90px * 14 - 1.5rem * 14));
         }
     }
     
@@ -439,10 +456,13 @@
         animation: none;
         justify-content: center;
         flex-wrap: wrap;
+        width: 100%;
+        transform: none !important;
     }
     
-    .slider-container {
-        width: 100%;
-        justify-content: center;
+    .logos-slider {
+        mask: none;
+        -webkit-mask: none;
+        overflow: visible;
     }
 }
