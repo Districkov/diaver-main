@@ -108,6 +108,7 @@
 /* Solutions Detailed Grid */
 .solutions-showcase-detailed {
     padding: 6rem 0;
+    background: #0a0a0a;
 }
 
 .section-header-enhanced {
@@ -197,6 +198,7 @@
     padding: 3rem;
     position: relative;
     z-index: 2;
+    gap: 3rm;
 }
 
 .solution-header-detailed {
@@ -697,7 +699,7 @@
     transform: translateY(-2px);
 }
 
-/* Остальные секции */
+/* Остальные секции остаются без изменений */
 .technology-platform {
     padding: 6rem 0;
     background: #0a0a0a;
