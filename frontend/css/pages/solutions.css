@@ -133,7 +133,7 @@
 .solutions-detailed-grid {
     display: flex;
     flex-direction: column;
-    gap: 3rem;
+    gap: 5rem; /* Увеличенный отступ между проектами */
 }
 
 /* ===== NEW ANIMATIONS FOR SOLUTION CARDS ===== */
@@ -572,7 +572,7 @@
 .solutions-compact-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 1.5rem;
+    gap: 3rem; /* Увеличенный отступ между проектами */
 }
 
 .solution-compact-card {
@@ -1033,6 +1033,15 @@
     .solutions-compact-grid {
         grid-template-columns: 1fr;
     }
+    
+    /* Адаптивные отступы для мобильных устройств */
+    .solutions-detailed-grid {
+        gap: 3rem;
+    }
+    
+    .solutions-compact-grid {
+        gap: 2rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1065,5 +1074,14 @@
     
     .process-step {
         padding: 1.5rem;
+    }
+    
+    /* Еще меньшие отступы для очень маленьких экранов */
+    .solutions-detailed-grid {
+        gap: 2.5rem;
+    }
+    
+    .solutions-compact-grid {
+        gap: 1.5rem;
     }
 }
