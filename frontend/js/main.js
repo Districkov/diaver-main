@@ -49,7 +49,6 @@ class DiaverApp {
                     <div class="nav-menu">
                         <a href="${isIndexPage ? 'index.html' : '../index.html'}" class="nav-link">Главная</a>
                         <a href="${basePath}solutions.html" class="nav-link">Решения</a>
-                        <a href="${basePath}products.html" class="nav-link">Продукты</a>
                         <a href="${basePath}company.html" class="nav-link">Компания</a>
                         <a href="${basePath}contacts.html" class="nav-link">Контакты</a>
                     </div>
